@@ -1,23 +1,33 @@
 from django.contrib import admin
 
-from stock.models import Stock
+from stock.models import (Stock, Currency, Account, AccountCurrency, AccountStock)
 
-from django.db import models
 
 @admin.register(Stock)
 class StockAdmin(admin.ModelAdmin):
     list_display = ("ticker", "name", "description")
-
-class Currency(models.Model):
-    name = models.CharField(max_length=40)
-    ticker = models.CharField(max_length=4)
-    sign = models.CharField(max_length=1)
-
-    def __str__(self):
-        return self.sign
+    pass
 
 @admin.register(Currency)
 class CurrencyAdmin(admin.ModelAdmin):
     pass
 
+@admin.register(AccountCurrency)
+class AccountCurrencyAdmin(admin.ModelAdmin):
+    pass
 
+@admin.register(AccountStock)
+class AccountStockAdmin(admin.ModelAdmin):
+    pass
+
+class AccountCurrencyInline(admin.TabularInline):
+    model = AccountCurrency
+
+class AccountStockInline(admin.TabularInline):
+    model = AccountStock
+
+@admin.register(Account)
+class AccountAdmin(admin.ModelAdmin):
+    inlines = [AccountCurrencyInline, AccountStockInline]
+
+# Register your models here.
